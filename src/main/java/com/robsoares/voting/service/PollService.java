@@ -1,4 +1,4 @@
-package com.robsoares.voting.service;
+ package com.robsoares.voting.service;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -19,6 +19,7 @@ public class PollService {
 	private PollRepository repository;
 	
 	public Poll insert(Poll obj) {
+		obj.setStatus(StatusPoll.ATIVA);
 		return repository.save(obj);
 	}
 	
@@ -31,7 +32,7 @@ public class PollService {
 		return repository.findAll();
 	}
 	
-	public void closeVoting(Long id) {
+	public Poll closeVoting(Long id) {
 		Poll poll = repository.findById(id)
 				.orElseThrow(() -> new ResourceNotFoundException(id));
 		
@@ -39,7 +40,7 @@ public class PollService {
 			throw new IllegalStateException("Voting is now closed");
 		}
 		
-		poll.setStatus(StatusPoll.ENCERRADA);
+		return repository.save(poll);
 	}
 	
 	public void checkActive(Poll poll) {
@@ -49,15 +50,15 @@ public class PollService {
 	}
 	
 	public void checkPeriod(Poll poll) {
-		LocalDate today = LocalDate.now();
-		
-		if (poll.getStartDate() != null && today.isBefore(poll.getStartDate())) {
-			throw new IllegalStateException("Voting is not start");
-		}
-		
-		if (poll.getEndDate() != null && today.isBefore(poll.getEndDate()) ) {
-			throw new IllegalStateException("Voting has already ended");
-		}
+	    LocalDate today = LocalDate.now();
+
+	    if (poll.getStartDate() != null && today.isBefore(poll.getStartDate())) {
+	        throw new IllegalStateException("Voting has not started yet");
+	    }
+
+	    if (poll.getEndDate() != null && today.isAfter(poll.getEndDate())) {
+	        throw new IllegalStateException("Voting has already ended");
+	    }
 	}
 }
 
