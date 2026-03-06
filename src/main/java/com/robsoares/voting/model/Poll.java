@@ -1,111 +1,90 @@
 package com.robsoares.voting.model;
 
+import java.io.Serializable;
 import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Objects;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.EnumType;
-import jakarta.persistence.Enumerated;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.OneToMany;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 
 @Entity
 @Table(name = "tb_poll")
-public class Poll {
+public class Poll implements Serializable {
+    private static final long serialVersionUID = 1L;
 
-	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private Long id;
-	
-	@Column(nullable = false, length = 50)
-	private String title;
-	
-	@Enumerated(EnumType.STRING)
-	@Column(name = "status_poll", nullable = false)
-	private StatusPoll status;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
 
-	@Column(name = "start_date")
-	private LocalDate startDate;
-	
-	@Column(name = "end_date")
-	private LocalDate endDate;
-	
-	@OneToMany(mappedBy = "poll")
-	private List<Option> options = new ArrayList<>();
-	
-	public Poll() {
-	}
+    private String title;
 
-	public Poll(Long id, String title, StatusPoll status, LocalDate startDate, LocalDate endDate) {
-		super();
-		this.id = id;
-		this.title = title;
-		this.status = status;
-		this.startDate = startDate;
-		this.endDate = endDate;
-	}
+    @Enumerated(EnumType.STRING)
+    private StatusPoll statusPoll;
 
-	public Long getId() {
-		return id;
-	}
+    private LocalDate startDate;
 
-	public void setId(Long id) {
-		this.id = id;
-	}
+    private LocalDate endDate;
 
-	public String getTitle() {
-		return title;
-	}
+    public Poll() {
+    }
 
-	public void setTitle(String title) {
-		this.title = title;
-	}
+    public Poll(Long id, String title, StatusPoll statusPoll, LocalDate startDate, LocalDate endDate) {
+        this.id = id;
+        this.title = title;
+        this.statusPoll = statusPoll;
+        this.startDate = startDate;
+        this.endDate = endDate;
+    }
 
-	public StatusPoll getStatus() {
-		return status;
-	}
+    public Long getId() {
+        return id;
+    }
 
-	public void setStatus(StatusPoll status) {
-		this.status = status;
-	}
+    public String getTitle() {
+        return title;
+    }
 
-	public LocalDate getStartDate() {
-		return startDate;
-	}
+    public StatusPoll getStatusPoll() {
+        return statusPoll;
+    }
 
-	public void setStartDate(LocalDate startDate) {
-		this.startDate = startDate;
-	}
+    public LocalDate getStartDate() {
+        return startDate;
+    }
 
-	public LocalDate getEndDate() {
-		return endDate;
-	}
+    public LocalDate getEndDate() {
+        return endDate;
+    }
 
-	public void setEndDate(LocalDate endDate) {
-		this.endDate = endDate;
-	}
+    public void setId(Long id) {
+        this.id = id;
+    }
 
-	@Override
-	public int hashCode() {
-		return Objects.hash(id);
-	}
+    public void setTitle(String title) {
+        this.title = title;
+    }
 
-	@Override
-	public boolean equals(Object obj) {
-		if (this == obj)
-			return true;
-		if (obj == null)
-			return false;
-		if (getClass() != obj.getClass())
-			return false;
-		Poll other = (Poll) obj;
-		return Objects.equals(id, other.id);
-	}
-	
+    public void setStatusPoll(StatusPoll statusPoll) {
+        this.statusPoll = statusPoll;
+    }
+
+    public void setStartDate(LocalDate startDate) {
+        this.startDate = startDate;
+    }
+
+    public void setEndDate(LocalDate endDate) {
+        this.endDate = endDate;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id);
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) return true;
+        if (!(obj instanceof Poll)) return false;
+        Poll other = (Poll) obj;
+        return Objects.equals(id, other.id);
+    }
 }
