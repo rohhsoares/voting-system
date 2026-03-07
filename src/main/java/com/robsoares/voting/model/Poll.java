@@ -1,10 +1,19 @@
 package com.robsoares.voting.model;
 
 import java.io.Serializable;
-import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Objects;
 
-import jakarta.persistence.*;
+import jakarta.persistence.CascadeType;
+import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.OneToMany;
+import jakarta.persistence.Table;
 
 @Entity
 @Table(name = "tb_poll")
@@ -17,22 +26,24 @@ public class Poll implements Serializable {
 
     private String title;
 
+    private LocalDateTime startTime;
+
+    private LocalDateTime endTime;
+
     @Enumerated(EnumType.STRING)
-    private StatusPoll statusPoll;
+    private StatusPoll status;
 
-    private LocalDate startDate;
-
-    private LocalDate endDate;
+    @OneToMany(mappedBy = "poll", cascade = CascadeType.ALL)
+    private List<Option> options;
 
     public Poll() {
     }
 
-    public Poll(Long id, String title, StatusPoll statusPoll, LocalDate startDate, LocalDate endDate) {
-        this.id = id;
+    public Poll(String title, LocalDateTime startTime, LocalDateTime endTime, StatusPoll status) {
         this.title = title;
-        this.statusPoll = statusPoll;
-        this.startDate = startDate;
-        this.endDate = endDate;
+        this.startTime = startTime;
+        this.endTime = endTime;
+        this.status = status;
     }
 
     public Long getId() {
@@ -43,48 +54,56 @@ public class Poll implements Serializable {
         return title;
     }
 
-    public StatusPoll getStatusPoll() {
-        return statusPoll;
+    public LocalDateTime getStartTime() {
+        return startTime;
     }
 
-    public LocalDate getStartDate() {
-        return startDate;
+    public LocalDateTime getEndTime() {
+        return endTime;
     }
 
-    public LocalDate getEndDate() {
-        return endDate;
+    public StatusPoll getStatus() {
+        return status;
     }
 
-    public void setId(Long id) {
-        this.id = id;
+    public List<Option> getOptions() {
+        return options;
     }
 
     public void setTitle(String title) {
         this.title = title;
     }
 
-    public void setStatusPoll(StatusPoll statusPoll) {
-        this.statusPoll = statusPoll;
+    public void setStartTime(LocalDateTime startTime) {
+        this.startTime = startTime;
     }
 
-    public void setStartDate(LocalDate startDate) {
-        this.startDate = startDate;
+    public void setEndTime(LocalDateTime endTime) {
+        this.endTime = endTime;
     }
 
-    public void setEndDate(LocalDate endDate) {
-        this.endDate = endDate;
+    public void setStatus(StatusPoll status) {
+        this.status = status;
     }
 
-    @Override
-    public int hashCode() {
-        return Objects.hash(id);
+    public void setOptions(List<Option> options) {
+        this.options = options;
     }
 
-    @Override
-    public boolean equals(Object obj) {
-        if (this == obj) return true;
-        if (!(obj instanceof Poll)) return false;
-        Poll other = (Poll) obj;
-        return Objects.equals(id, other.id);
-    }
+	@Override
+	public int hashCode() {
+		return Objects.hash(id);
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		Poll other = (Poll) obj;
+		return Objects.equals(id, other.id);
+	}
 }

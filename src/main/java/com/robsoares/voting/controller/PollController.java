@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.robsoares.voting.dto.PollResultDTO;
 import com.robsoares.voting.model.Poll;
 import com.robsoares.voting.service.PollService;
 
@@ -50,5 +51,10 @@ public class PollController {
     public ResponseEntity<Poll> close(@PathVariable Long id) {
         Poll poll = service.closeVoting(id);
         return ResponseEntity.ok(poll);
+    }
+    
+    @GetMapping("/{pollId}/results")
+    public ResponseEntity<PollResultDTO> getResults(@PathVariable Long pollId) {
+        return ResponseEntity.ok(service.getResults(pollId));
     }
 }

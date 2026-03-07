@@ -46,7 +46,7 @@ public class VoteService {
         }
 
         // verifica se CPF já votou nessa votação
-        boolean alreadyVoted = voteRepository.existsByCpfAndPollId(cpf, pollId);
+        boolean alreadyVoted = voteRepository.existsByCpfAndOptionPollId(cpf, pollId);
 
         if (alreadyVoted) {
             throw new IllegalArgumentException("This CPF has already voted in this election");
