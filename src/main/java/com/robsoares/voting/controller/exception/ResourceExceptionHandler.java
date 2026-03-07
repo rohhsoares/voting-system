@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 
 import com.robsoares.voting.service.exception.ResourceNotFoundException;
 
+import jakarta.persistence.EntityNotFoundException;
 import jakarta.servlet.http.HttpServletRequest;
 
 @ControllerAdvice
@@ -22,4 +23,17 @@ public class ResourceExceptionHandler {
 		return ResponseEntity.status(status).body(err);
 	}
 	
+	@ExceptionHandler(EntityNotFoundException.class)
+    public ResponseEntity<String> handleNotFound(EntityNotFoundException ex) {
+        return ResponseEntity
+                .status(HttpStatus.NOT_FOUND)
+                .body(ex.getMessage());
+    }
+	
+	 @ExceptionHandler(IllegalArgumentException.class)
+	    public ResponseEntity<String> handleBusinessError(IllegalArgumentException ex) {
+	        return ResponseEntity
+	                .status(HttpStatus.BAD_REQUEST)
+	                .body(ex.getMessage());
+	    }
 }
